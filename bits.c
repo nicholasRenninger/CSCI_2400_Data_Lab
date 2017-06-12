@@ -1,7 +1,8 @@
 /* 
  * CS:APP Data Lab 
  * 
- * <Please put your name and userid here>
+ * Name: Nicholas Renninger
+ * SID: 105492876
  * 
  * bits.c - Source file with your solutions to the Lab.
  *          This is the file you will hand in to your instructor.
@@ -51,7 +52,7 @@ INTEGER CODING RULES:
   Some of the problems restrict the set of allowed operators even further.
   Each "Expr" may consist of multiple operators. You are not restricted to
   one operator per line.
-
+    
   You are expressly forbidden to:
   1. Use any control constructs such as if, do, while, for, switch, etc.
   2. Define or use any macros.
@@ -147,6 +148,7 @@ NOTES:
    You should have received a copy of the GNU Lesser General Public
    License along with the GNU C Library; if not, see
    <http://www.gnu.org/licenses/>.  */
+
 /* This header is separate from features.h so that the compiler can
    include it implicitly at the start of every compilation.  It must
    not itself include <features.h> or any other header that includes
@@ -154,16 +156,21 @@ NOTES:
    test macros that may be defined in a source file before it first
    explicitly includes a system header.  GCC knows the name of this
    header in order to preinclude it.  */
+
 /* glibc's intent is to support the IEC 559 math functionality, real
    and complex.  If the GCC (4.9 and later) predefined macros
    specifying compiler intent are available, use them to determine
    whether the overall intent is to support these features; otherwise,
    presume an older compiler has intent to support these features and
    define these macros by default.  */
+
 /* wchar_t uses Unicode 8.0.0.  Version 8.0 of the Unicode Standard is
    synchronized with ISO/IEC 10646:2014, plus Amendment 1 (published
    2015-05-15).  */
+
 /* We do not support C11 <threads.h>.  */
+
+
 /* 
  * bitAnd - x&y using only ~ and | 
  *   Example: bitAnd(6, 5) = 4
@@ -174,6 +181,7 @@ NOTES:
 int bitAnd(int x, int y) {
   return 2;
 }
+
 /* 
  * getByte - Extract byte n from word x
  *   Bytes numbered from 0 (LSB) to 3 (MSB)
@@ -185,6 +193,7 @@ int bitAnd(int x, int y) {
 int getByte(int x, int n) {
   return 2;
 }
+
 /* 
  * logicalShift - shift x to the right by n, using a logical shift
  *   Can assume that 0 <= n <= 31
@@ -196,6 +205,7 @@ int getByte(int x, int n) {
 int logicalShift(int x, int n) {
   return 2;
 }
+
 /*
  * bitCount - returns count of number of 1's in word
  *   Examples: bitCount(5) = 2, bitCount(7) = 3
@@ -206,6 +216,7 @@ int logicalShift(int x, int n) {
 int bitCount(int x) {
   return 2;
 }
+
 /* 
  * bang - Compute !x without using !
  *   Examples: bang(3) = 0, bang(0) = 1
@@ -216,6 +227,7 @@ int bitCount(int x) {
 int bang(int x) {
   return 2;
 }
+
 /* 
  * tmin - return minimum two's complement integer 
  *   Legal ops: ! ~ & ^ | + << >>
@@ -225,6 +237,7 @@ int bang(int x) {
 int tmin(void) {
   return 2;
 }
+
 /* 
  * fitsBits - return 1 if x can be represented as an 
  *  n-bit, two's complement integer.
@@ -237,6 +250,7 @@ int tmin(void) {
 int fitsBits(int x, int n) {
   return 2;
 }
+
 /* 
  * divpwr2 - Compute x/(2^n), for 0 <= n <= 30
  *  Round toward zero
@@ -248,6 +262,7 @@ int fitsBits(int x, int n) {
 int divpwr2(int x, int n) {
     return 2;
 }
+
 /* 
  * negate - return -x 
  *   Example: negate(1) = -1.
@@ -258,6 +273,7 @@ int divpwr2(int x, int n) {
 int negate(int x) {
   return 2;
 }
+
 /* 
  * isPositive - return 1 if x > 0, return 0 otherwise 
  *   Example: isPositive(-1) = 0.
@@ -268,6 +284,7 @@ int negate(int x) {
 int isPositive(int x) {
   return 2;
 }
+
 /* 
  * isLessOrEqual - if x <= y  then return 1, else return 0 
  *   Example: isLessOrEqual(4,5) = 1.
@@ -278,6 +295,7 @@ int isPositive(int x) {
 int isLessOrEqual(int x, int y) {
   return 2;
 }
+
 /*
  * ilog2 - return floor(log base 2 of x), where x > 0
  *   Example: ilog2(16) = 4
@@ -288,6 +306,7 @@ int isLessOrEqual(int x, int y) {
 int ilog2(int x) {
   return 2;
 }
+
 /* 
  * float_neg - Return bit-level equivalent of expression -f for
  *   floating point argument f.
@@ -302,6 +321,7 @@ int ilog2(int x) {
 unsigned float_neg(unsigned uf) {
  return 2;
 }
+
 /* 
  * float_i2f - Return bit-level equivalent of expression (float) x
  *   Result is returned as unsigned int, but
@@ -314,6 +334,7 @@ unsigned float_neg(unsigned uf) {
 unsigned float_i2f(int x) {
   return 2;
 }
+
 /* 
  * float_twice - Return bit-level equivalent of expression 2*f for
  *   floating point argument f.
