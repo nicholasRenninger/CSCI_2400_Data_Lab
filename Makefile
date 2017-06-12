@@ -3,7 +3,7 @@
 # 
 CC = gcc
 CFLAGS += -O -Wall -m32
-CPPFLAGS += -Iinclude # -I is a preprocessor flag, not a compiler flag
+CPPFLAGS += -Iinc # -I is a preprocessor flag, not a compiler flag
 CFLAGS += -O -Wall -m32 # some warnings about bad code, 32-bit only
 LDFLAGS += -Llib # -L is a linker flag
 LDLIBS += -lm # Left empty if no libs are needed
@@ -28,13 +28,13 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
     $(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # show targets
-$(TARGET_DIR)/fshow: SHOW_OBJ/fshow.o
+$(TARGET_DIR)/fshow: show_obj/fshow.o
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-$(TARGET_DIR)/ishow: SHOW_OBJ/ishow.o
+$(TARGET_DIR)/ishow: show_obj/ishow.o
 	$(CC) $(LDFLAGS) $^ $(LDLIBS) -o $@
 
-SHOW_OBJ/%.o: SHOW_SRC/%.c
+show_obj/%.o: SHOW_SRC/%.c
     $(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # Forces a recompile. Used by the driver program. 
