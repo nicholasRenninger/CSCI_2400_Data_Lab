@@ -579,6 +579,7 @@ int main(int argc, char *argv[])
 
     /* test each function */
     errors = run_tests();
+    printf("%d\n", errors);
 
     return 0;
 }

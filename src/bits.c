@@ -192,7 +192,11 @@ int bitAnd(int x, int y) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-	return 2;
+	/* First need to shift the bits by (n * 2^3) - shift by one byte.
+		 Then, mask out any leading digits by doing bitwise and with TMAX mask.*/
+	int shiftedNBytes = x >> (n << 3);
+	int mask = 0xFF;
+	return shiftedNBytes & mask;
 }
 
 /* 
@@ -204,6 +208,7 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
+	/* */ 
 	return 2;
 }
 
