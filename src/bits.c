@@ -192,8 +192,10 @@ int bitAnd(int x, int y) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-	/* First need to shift the bits by (n * 2^3) - shift by one byte.
-		 Then, mask out any leading digits by doing bitwise and with TMAX mask.*/
+	/* First need to right shift the bits by (n * 2^3) - right shift by one byte.
+		 Then, mask out any leading digits by doing bitwise and with TMAX mask.
+		 Task becomes to push all of the bits to the right until, then get rid of 
+		 leading digits*/
 	int shiftedNBytes = x >> (n << 3);
 	int mask = 0xFF;
 	return shiftedNBytes & mask;
