@@ -38,7 +38,8 @@ show_obj/%.o: show_src/%.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 # Forces a recompile. Used by the driver program. 
-btestexplicit:
+btestexplicit: $(OBJ)
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS) -o $@
 	$(CC) $(CFLAGS) $(LIBS) -o btest $(SRC_DIR)/bits.c $(SRC_DIR)/btest.c $(SRC_DIR)/decl.c $(SRC_DIR)/tests.c 
 
 clean:
