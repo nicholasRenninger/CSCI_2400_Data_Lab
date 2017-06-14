@@ -209,12 +209,18 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-	/* */
-	int MSB = (x >> 31) & 0xFF; // get the MSB
-	int MSB_Mask = ~(MSB << 27); // generate mask for MS Byte
-	int arithmeticShiftX = x >> n;
-	int logicalShiftX = arithmeticShiftX & MSB_Mask;
 
+	/* Need to generate a mask of n leading 0s followed by 1s in order to remove
+	 * any extra 1s placed by arithmetic shift. Then just and the mask with the
+	 * arithmetic right shift by n bits ( x >> n ) to get the equivolent logical
+	 * shift. 
+	 */
+
+	int onesMask = ~(( ~(x & 0) << (31 - n)) << 1);
+	//int onesMask = ~(1 << 31 >> n << 1);
+	int arithmeticShiftX = x >> n;
+	int logicalShiftX = arithmeticShiftX & onesMask;
+	
 	return logicalShiftX;
 }
 

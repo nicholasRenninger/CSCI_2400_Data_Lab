@@ -43,6 +43,6 @@ btestexplicit: $(OBJ)
 	$(CC) $(CFLAGS) $(LIBS) -o btest $(SRC_DIR)/bits.c $(SRC_DIR)/btest.c $(SRC_DIR)/decl.c $(SRC_DIR)/tests.c 
 
 clean:
-	rm -f $(OBJ_DIR)/*.o $(TARGET_DIR)/* *~
+	rm -f $(OBJ_DIR)/*.o *~
 
 
