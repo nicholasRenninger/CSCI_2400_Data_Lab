@@ -180,8 +180,7 @@ NOTES:
  */
 int bitAnd(int x, int y) {
 	/* Use De Morgan's Laws: A & B = ~(~A | ~B)*/
-	return ~(~x | ~y);
-}
+	return ~(~x | ~y);}
 
 /* 
  * getByte - Extract byte n from word x
@@ -192,7 +191,7 @@ int bitAnd(int x, int y) {
  *   Rating: 2
  */
 int getByte(int x, int n) {
-	/* First need to right shift the bits by (n * 2^3) - right shift by one byte.
+	/* First need to right shift the bits by (n * 2^3) - right shift by n bytes.
 		 Then, mask out any leading digits by doing bitwise and with TMAX mask.
 		 Task becomes to push all of the bits to the right until, then get rid of 
 		 leading digits*/
@@ -210,8 +209,13 @@ int getByte(int x, int n) {
  *   Rating: 3 
  */
 int logicalShift(int x, int n) {
-	/* */ 
-	return 2;
+	/* */
+	int MSB = (x >> 31) & 0xFF; // get the MSB
+	int MSB_Mask = ~(MSB << 27); // generate mask for MS Byte
+	int arithmeticShiftX = x >> n;
+	int logicalShiftX = arithmeticShiftX & MSB_Mask;
+
+	return logicalShiftX;
 }
 
 /*
