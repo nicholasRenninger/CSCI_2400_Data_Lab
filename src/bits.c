@@ -216,11 +216,11 @@ int logicalShift(int x, int n) {
 	 * shift. 
 	 */
 
-	int onesMask = ~(( ~(x & 0) << (31 - n)) << 1);
-	//int onesMask = ~(1 << 31 >> n << 1);
+	//int onesMask = ~(( ~(x & 0) << (31 - n)) << 1);
+	int onesMask = ~(1 << 31 >> n << 1);
 	int arithmeticShiftX = x >> n;
 	int logicalShiftX = arithmeticShiftX & onesMask;
-	
+
 	return logicalShiftX;
 }
 
@@ -232,7 +232,44 @@ int logicalShift(int x, int n) {
  *   Rating: 4
  */
 int bitCount(int x) {
-	return 2;
+			
+	/* determine if the LSB of each byte of x is a one. Then shift x right by one
+	/* byte and repeat the proccess, adding any new ones to the running total.
+	/* Then add up the grand total at the end, and mask out all but one byte for
+	/* the final count of ones.*/
+
+	int LSB_Counter = 0x01; // initial mask bit-pattern
+	int currentOneCount, finalOneCount, onesMask;
+
+	// generate bitmask (LSB_Counter) to count the LSB of each byte fromm the
+	// initial bit-mask pattern: 0x01010101.
+	LSB_Counter = LSB_Counter | (LSB_Counter << 16);
+	LSB_Counter = LSB_Counter | (LSB_Counter << 8);
+
+	// Count LSB of each byte, add it to the total, then shift x right one more
+	// bit and repeat the process for each byte.
+	currentOneCount = (x & LSB_Counter);
+
+	currentOneCount = currentOneCount + ((x >> 1) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 2) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 3) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 4) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 5) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 6) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 7) & LSB_Counter);
+
+	// Add the first half of the ones count for each byte together.
+	currentOneCount = currentOneCount + (currentOneCount >> 16);
+
+	// Add the second half of the ones count for each byte together.
+	currentOneCount = currentOneCount + (currentOneCount >> 8);
+
+	// max number of ones = 32 -> stored in one byte, so mask out all but last
+	// byte of the current ones mask.
+	onesMask = 0xff;
+	finalOneCount = currentOneCount & onesMask;
+
+	return  finalOneCount;	
 }
 
 /* 
