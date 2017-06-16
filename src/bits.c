@@ -393,7 +393,11 @@ int negate(int x) {
  *   Rating: 3
  */
 int isPositive(int x) {
-	return 2;
+	
+	/* Check the sign bit. If the sign bit is 0 and x != 0, return true. */
+
+	int signBit = x >> 31;
+	return !signBit & !!x;
 }
 
 /* 
