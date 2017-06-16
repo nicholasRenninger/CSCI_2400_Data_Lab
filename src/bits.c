@@ -234,9 +234,10 @@ int logicalShift(int x, int n) {
 int bitCount(int x) {
 			
 	/* determine if the LSB of each byte of x is a one. Then shift x right by one
-	/* byte and repeat the proccess, adding any new ones to the running total.
-	/* Then add up the grand total at the end, and mask out all but one byte for
-	/* the final count of ones.*/
+	 * byte and repeat the proccess, adding any new ones to the running total.
+	 * Then add up the grand total at the end, and mask out all but one byte for
+	 * the final count of ones. 
+	 */
 
 	int LSB_Counter = 0x01; // initial mask bit-pattern
 	int currentOneCount, finalOneCount, onesMask;
@@ -280,7 +281,22 @@ int bitCount(int x) {
  *   Rating: 4 
  */
 int bang(int x) {
-	return 2;
+
+	/* Checks if x is zero with with bitwise operations, */
+
+	// find two's complement of x to use as subtraction
+	int twosCompX = ~x + 0x1; 
+
+	// determine if x == 0 using bitwise operators using the identity: a == b :=
+	// ~( (a - b) | (b - a) ). Shifts 32 - 1 bits to ensure that the first bit
+	// sets the equality of the statement.
+	int bangX = ~((0x0 + twosCompX) | (x + 0x0)) >> 31;
+
+	// only return first bit of bangX, as bangX will either be 0x00000000 or
+	// 0xffffffff at this point.
+	bangX = bangX & 0x1;
+
+	return bangX;
 }
 
 /* 
@@ -290,7 +306,10 @@ int bang(int x) {
  *   Rating: 1
  */
 int tmin(void) {
-	return 2;
+
+	/* minimum two's comp. integer is a one in the MSB and the rest zeros. */
+
+	return 0x1 << 31;
 }
 
 /* 
