@@ -347,7 +347,26 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-		return x >> n;
+
+	/* x >> n works, except when x is a negative number not divisble by 2^n. In
+	 * this, case x >> n needs to be corrected by adding one to the quotient. 
+	 */
+
+	// start by computing x/(2^n) for all positive integers and negative 
+	// integers divisible by 2^ns
+	int basicDivide2n = (x >> (n));
+
+	// get sign bit of x
+	int isNegative = (x >> 31); 
+
+	// determine if x can be divided by 2^n
+	int isntDivBy2N = !!(x << (32 + (~n + 1)));
+
+	// if x is negative, not divisible by 2^n, and n != 0 (n = 1 => 2 ^ 0 = 
+	// 1 => x is always divisble by 2^n), add one to the quotient.
+	int negCorrection = (isNegative & isntDivBy2N) & !!n;
+
+	return basicDivide2n + negCorrection;
 }
 
 /* 
