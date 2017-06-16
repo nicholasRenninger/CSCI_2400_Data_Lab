@@ -282,7 +282,7 @@ int bitCount(int x) {
  */
 int bang(int x) {
 
-	/* Checks if x is zero with with bitwise operations, */
+	/* Checks if x is zero with with bitwise operations. */
 
 	// find two's complement of x to use as subtraction
 	int twosCompX = ~x + 0x1; 
@@ -322,7 +322,20 @@ int tmin(void) {
  *   Rating: 2
  */
 int fitsBits(int x, int n) {
-	return 2;
+
+	/* Shift the bits n-1 to the right, such that if x can be perfectly
+	 * represented by n bits, shiftedX = 0. Then add 1 to this number and then
+	 * right shift it again by 1 bit. If the number is 0, then the number can be
+	 * represented by n bits
+	 */
+
+	int onesTwosComp = ~0x1 + 0x1;
+	int shiftedX = x >> (n + onesTwosComp); 
+	int oneOrZero = 0x1 + shiftedX;
+	int lastThang = oneOrZero >> 1;
+
+	// 0 means it fits in n-bits, so need to not the answer
+	return !lastThang;
 }
 
 /* 
@@ -334,7 +347,7 @@ int fitsBits(int x, int n) {
  *   Rating: 2
  */
 int divpwr2(int x, int n) {
-		return 2;
+		return x >> n;
 }
 
 /* 
