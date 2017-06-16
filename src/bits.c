@@ -377,7 +377,12 @@ int divpwr2(int x, int n) {
  *   Rating: 2
  */
 int negate(int x) {
-	return 2;
+
+	/* The negation of a two's complement integers is given simply by its two's 
+	 * complement.
+	 */
+
+	return ~x + 1;
 }
 
 /* 
