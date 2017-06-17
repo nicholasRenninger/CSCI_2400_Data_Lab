@@ -270,7 +270,7 @@ int bitCount(int x) {
 	onesMask = 0xff;
 	finalOneCount = currentOneCount & onesMask;
 
-	return  finalOneCount;	
+	return finalOneCount;	
 }
 
 /* 
@@ -409,7 +409,7 @@ int isPositive(int x) {
  */
 int isLessOrEqual(int x, int y) {
 
-	/*  */
+	/* Checks sign of y-x, and handles some special cases due to overflow. */
 
 	// need to get the sign of the x and y
 	int xSign = x >> 31;
@@ -442,7 +442,69 @@ int isLessOrEqual(int x, int y) {
  *   Rating: 4
  */
 int ilog2(int x) {
-	return 2;
+
+  /* floor(Log base 2) boils down to find the index of the MSB in the number.
+	 * First make a number with all ones to the left of the MSB. Then simply count
+	 * the number of ones to find the index of the original MSB, which is 
+	 * equivalent to floor(log base 2).
+	 */
+
+	int LSB_Counter = 0x01; // initial mask bit-pattern
+	int currentOneCount, finalOneCount, onesMask;
+
+	// Need to fill in all ones up to and including the index of the MSB. This is
+	// done by shifting over by 1, 2, ... and ORing the new x. This sets all
+	// adjacent bits right of the MSB to one, inclusing the MSB. 
+	// 
+	// REFERENCED from:
+	// https://stackoverflow.com/questions/21413565/create-a-mask-that-marks-the-
+	// most-significant-set-bit-using-only-bitwise-operat
+	x |= x >> 1;
+	x |= x >> 2;
+	x |= x >> 4;
+	x |= x >> 8;
+	x |= x >> 16;
+
+	// need to shift one more to the right to set the MSB to zero, as we need to
+	// count the number of zeros the right of the MSB.
+	x >>= 1;
+
+
+	/***************************************************************/
+	/* NOW USE BITCOUNT CODE TO COUNT THE # OF BITS TO LEFT OF MSB */
+	/***************************************************************/	
+
+
+	// generate bitmask (LSB_Counter) to count the LSB of each byte fromm the
+	// initial bit-mask pattern: 0x01010101.
+	LSB_Counter = LSB_Counter | (LSB_Counter << 16);
+	LSB_Counter = LSB_Counter | (LSB_Counter << 8);
+
+	// Count LSB of each byte, add it to the total, then shift x right one more
+	// bit and repeat the process for each byte.
+	currentOneCount = (x & LSB_Counter);
+
+	currentOneCount = currentOneCount + ((x >> 1) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 2) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 3) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 4) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 5) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 6) & LSB_Counter);
+	currentOneCount = currentOneCount + ((x >> 7) & LSB_Counter);
+
+	// Add the first half of the ones count for each byte together.
+	currentOneCount = currentOneCount + (currentOneCount >> 16);
+
+	// Add the second half of the ones count for each byte together.
+	currentOneCount = currentOneCount + (currentOneCount >> 8);
+
+	// max number of ones = 32 -> stored in one byte, so mask out all but last
+	// byte of the current ones mask.
+	onesMask = 0xff;
+	finalOneCount = currentOneCount & onesMask;
+
+	return finalOneCount;
+
 }
 
 /* 
