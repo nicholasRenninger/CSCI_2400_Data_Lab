@@ -408,7 +408,30 @@ int isPositive(int x) {
  *   Rating: 3
  */
 int isLessOrEqual(int x, int y) {
-	return 2;
+
+	/*  */
+
+	// need to get the sign of the x and y
+	int xSign = x >> 31;
+	int ySign = y >> 31;
+	
+	// returns 1 if x and y are the same sign or x is neg. and y is pos.
+	// returns 0 if x is pos. and y is neg.
+	// conditions essentially checks that x MIGHT be less than or eq. to y
+	int possiblyLessThan = xSign | ~ySign;
+
+	// Handles special case of x being neg. and y being pos., and immediately
+	// returns 1. This is done to handle overflow; when large integers are added,
+	// the sign bit will no longer be reflective of the actual result, so this
+	// function is implemented to manually guarantee that x = (-), y = (+) always
+	// returns true. Specifically, if x = neg. and y = pos., returns 1.
+	int xNegYPos = ~(xSign & ~ySign) + 0x1;
+
+	// do: y-x. If the sum is negative return false.
+	int twosCompX = ~x + 1;
+	int signYMinusX = ((y + twosCompX) >> 31) + 0x1;
+ 
+	return possiblyLessThan & (xNegYPos | signYMinusX);
 }
 
 /*
