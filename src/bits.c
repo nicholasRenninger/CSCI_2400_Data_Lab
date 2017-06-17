@@ -520,17 +520,26 @@ int ilog2(int x) {
  */
 unsigned float_neg(unsigned uf) {
 
-	/* */ 
+	/* Flip the sign of uf by adding 0x80000000, and handle the special case where
+	 * uf = NaN. 
+	 */
 
+	// get the sign bit of uf
 	int flipSign = 0x1 << 31;
-	int NaN = (0xff << 23) + (0x1 << 22);
+
+	// create a mask that only keeps the first 31 bits of uf, in order to check
+	// for NaN regardless of the sign of NaN.
 	int onesMask = (1 << 31) + ~0;
 
+	// create a positive NaN constant: s = 0, exp = 0xff, M != 0
+	int NaN = (0xff << 23) + (0x1 << 22);
+
+	// if the first 31 bits of uf match NaN, return uf
 	if((uf & onesMask) == NaN){
 	
 		return uf;
 
-	} else {
+	} else { // otherwise flip the sign of uf by adding 0x80000000
 		
 		return uf + flipSign;
 
