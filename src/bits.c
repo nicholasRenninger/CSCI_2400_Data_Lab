@@ -443,7 +443,7 @@ int isLessOrEqual(int x, int y) {
  */
 int ilog2(int x) {
 
-  /* floor(Log base 2) boils down to find the index of the MSB in the number.
+  /* floor(Log base 2) boils down to finding the index of the MSB in the number.
 	 * First make a number with all ones to the left of the MSB. Then simply count
 	 * the number of ones to find the index of the original MSB, which is 
 	 * equivalent to floor(log base 2).
@@ -519,7 +519,22 @@ int ilog2(int x) {
  *   Rating: 2
  */
 unsigned float_neg(unsigned uf) {
- return 2;
+
+	/* */ 
+
+	int flipSign = 0x1 << 31;
+	int NaN = (0xff << 23) + (0x1 << 22);
+	int onesMask = (1 << 31) + ~0;
+
+	if((uf & onesMask) == NaN){
+	
+		return uf;
+
+	} else {
+		
+		return uf + flipSign;
+
+	}
 }
 
 /* 
