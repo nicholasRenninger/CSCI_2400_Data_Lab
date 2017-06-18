@@ -556,7 +556,82 @@ unsigned float_neg(unsigned uf) {
  *   Rating: 4
  */
 unsigned float_i2f(int x) {
-	return 2;
+	
+	/*  */
+
+	printf("x = 0x%08x, %d\n", x, x);
+	int NUM_M_BITS = 23;
+	int NUM_S_BITS = 1;
+	int NUM_EXP_BITS = 8;
+	int NUM_TOT_BITS = 32;
+	int BIAS_NUM = 127; // 127 (base 10)
+	int BIAS_ADDEND = BIAS_NUM << NUM_M_BITS; 
+	int MSBMask = (0x1 << 31);
+	printf("BIAS_ADDEND = 0x%08x\n", BIAS_ADDEND);
+
+	int E = 0x0;
+	int exp = 0x0;
+	int M = 0x0;
+	int S = x & MSBMask;
+
+	printf("x = %d, MSBMask = %d\n", x, MSBMask);
+		
+	if (x == 0)
+	{
+		return x;
+	}
+
+	if (x == MSBMask){
+		printf("HERE\n");
+		return 0xcf << 24;
+	}
+
+	if(x < 0x0)
+		x = -x;
+
+	printf("abs(x) = 0x%08x, %d\n", x, x);
+	// int posX = x & ~(0x1 << 31);
+	// int posX_makeM = posX;
+	//printf("posX = 0x%08x\n", posX); 
+
+	int temp_x = x;
+	while(1){
+		
+		if (x < temp_x)
+		{
+			break;	
+
+		} else {
+
+			temp_x *= 2;
+			E++;
+		}
+	}
+
+
+	printf("E = %d\n", E);
+
+	exp = (E + BIAS_NUM) << NUM_M_BITS;
+	printf("E = %d\n", E);
+
+	int mantissaMask = ~(1 << 31 >> (NUM_TOT_BITS - E) << 1);
+	M = x & mantissaMask;
+	printf("M = 0x%08x, mantissaMask = 0x%08x\n", M, mantissaMask);
+
+	if(E > NUM_M_BITS){
+		printf("greater than M\n%d\n", E - NUM_M_BITS);
+		M >>= E - NUM_M_BITS;
+
+	} else {
+		printf("less than M\n%d\n", NUM_M_BITS - E);
+		M <<= NUM_M_BITS - E;
+	}
+
+	M = M ^ (0x1 << NUM_M_BITS);
+
+	printf("S = 0x%08x, exp = 0x%08x, M = 0x%08x\n\n", S, exp, M);
+	return S | exp | M;
+
 }
 
 /* 
