@@ -559,7 +559,7 @@ unsigned float_i2f(int x) {
 	
 	/* Finds the sign bit, finds index the MSB of abs(x) to determine the exponent
 	 * of x, and then compresses and round the rest of the bits after the MSB of
-	 * abs(x) into the first 23 bits of the result.
+	 * abs(x) into the first 23 bits of the result - into the mantissa.
 	 */
 
 	int MAX_EXP = 158;
@@ -575,8 +575,6 @@ unsigned float_i2f(int x) {
   int ONE27_is_set;
   int oddMantissa;
   int oddBitsSet;
-
-
 
   int ONE28BitMask = 0x80;
   int ONE27BitMask = 0x7F;
@@ -640,5 +638,68 @@ unsigned float_i2f(int x) {
  *   Rating: 4
  */
 unsigned float_twice(unsigned uf) {
-	return 2;
+
+	/* 2 * uf simply results in the incrementing of the exp bits of uf by, except
+	 * in a variety of special cases. For these special cases, the mantissa and
+	 * the exp bits may be modified in an abnormal way due to denormalized /
+	 * special values in floating point representations.
+	 */
+
+	// Mask to extract only the 8 exp bits of float uf.
+	unsigned EXP_MASK = 0xff << 23;
+
+	// Mask to extract only the 1 sign bit of float uf.
+	unsigned SIGN_MASK = 0x1 << 31;
+
+	// Mask to extract the 8 exp bits corresponding to uf = (float) +/- 1
+	unsigned ONE_FLOAT_MASK = 0x7F << 23;
+
+	// Mask to extract only the 23 mantissa bits of uf.
+	unsigned M_MASK = ~(1 << 31 >> 9 << 1);
+
+	// EXP mask also is the floating point representation of +inf.
+	unsigned infinity = EXP_MASK;
+
+	// Use each mask to extract and store the relevant part of uf to conditionally
+	// manipulate later.
+	unsigned S = uf & SIGN_MASK;
+	unsigned exp = uf & EXP_MASK;
+	unsigned M = uf & M_MASK;
+
+	// define the (positive) NaN and ZERO constants for floats.
+	unsigned isNAN = M && (exp == EXP_MASK);
+	unsigned isZero = !(uf & ~SIGN_MASK);
+
+	// if uf = NaN OR uf = +/- inf OR uf = 0, return uf
+	if (isNAN || (uf & ~SIGN_MASK) == infinity || isZero)
+	{ 
+		// return original uf
+
+	} else if ( (uf & EXP_MASK) == ONE_FLOAT_MASK) // if uf = +/- 1.xxxx...
+	{
+		// if uf = 1.xxx... , doubling the exponent is done by switching the exp.
+		// bits of uf from 0x3f80000 to be 0x40000000.
+		exp = 0x80 << 23; 
+
+	} else if (!exp) // uf < 0, denormalized values now
+	{
+		// once uf < 0, the value of uf in float is entirely determined by the
+		// mantissa, so you can simply multiply the mantissa by 2 (M <<= 1) to get
+		// 2*uf.
+		M <<= 1;
+		exp = 0;
+
+	} else
+	{	
+	
+		// if none of these other special cases apply, doubling uf in float is as
+		// simple as incrementing the value of the 8 bit exp portion of uf by 1.
+		exp >>= 23;
+		exp++;
+		exp <<= 23;
+	}
+
+	// return the three parts of the float representation, as modified by the
+	// conditional statements above.
+	return S + exp + M;
 }
